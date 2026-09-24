@@ -1,5 +1,7 @@
 # File-system support on RHEL 10
 
+[English](filesystem-support.md) | [简体中文](filesystem-support.zh-CN.md)
+
 GParted compiles file-system back ends into the application, but discovers
 most native helper tools each time it starts.  A successful build therefore
 does not prove that every operation is available at run time.

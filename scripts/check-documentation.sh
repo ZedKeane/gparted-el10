@@ -9,7 +9,9 @@ for required_file in \
     "$repo_root/README.md" \
     "$repo_root/README.zh-CN.md" \
     "$matrix" \
-    "$matrix_zh"; do
+    "$matrix_zh" \
+    "$repo_root/docs/filesystem-support.md" \
+    "$repo_root/docs/filesystem-support.zh-CN.md"; do
     if [[ ! -s "$required_file" ]]; then
         printf 'error: required documentation missing: %s\n' "$required_file" >&2
         exit 1

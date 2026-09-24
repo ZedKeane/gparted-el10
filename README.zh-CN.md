@@ -22,6 +22,28 @@
 - 提供覆盖上游全部 29 种文件系统，以及创建、扩大、缩小、移动、复制、
   检查、标签和 UUID 操作的双语能力矩阵。
 
+## 支持的系统
+
+- Red Hat Enterprise Linux 10
+- CentOS Stream 10
+- 已启用匹配 EPEL 10 软件包的 AlmaLinux 10 和 Rocky Linux 10
+
+GitHub Actions 在 CentOS Stream 10 容器中构建，不能代替在上述每个系统上的
+实际测试。
+
+## 安装发布版本
+
+从 [Releases 页面](https://github.com/ZedKeane/gparted-rhel10/releases)
+下载 x86_64 RPM 和 `SHA256SUMS`，然后运行：
+
+```bash
+sha256sum -c --ignore-missing SHA256SUMS
+sudo dnf install ./gparted-1.8.1-2.el10.x86_64.rpm
+```
+
+RPM 尚未签名。校验和只能发现下载损坏，不能证明发布者身份；这些文件也不是
+带签名的软件仓库。
+
 ## 构建
 
 先启用当前发行版对应的 CodeReady Builder/CRB 与 EPEL 10，然后运行：
@@ -60,7 +82,7 @@ RHEL 10 不提供 Btrfs 内核驱动。安装 `btrfs-progs` 后，GParted 可以
 扩大和缩小仍不可用。需要调整 Btrfs 大小时，请使用 Fedora Live 或
 GParted Live。
 
-更多说明见 [docs/filesystem-support.md](docs/filesystem-support.md)。
+更多说明见[中文文件系统说明](docs/filesystem-support.zh-CN.md)。
 
 ## 简体中文兼容
 
@@ -75,5 +97,6 @@ GParted Live。
 操作。实际修改分区前必须备份重要数据；移动操作系统分区时建议从 Live
 环境启动。
 
-本地构建和 GitHub Actions 产物默认没有 RPM 签名。公开发布可安装软件前，
-应配置 RPM 签名密钥，或使用能为软件包及仓库元数据签名的 COPR 等构建服务。
+本地构建和 GitHub Actions 发布文件没有 RPM 签名。将来若提供带签名的
+软件仓库，需要管理 RPM 签名密钥，或使用能为软件包及仓库元数据签名的
+COPR 等构建服务。

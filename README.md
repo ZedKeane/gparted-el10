@@ -37,6 +37,19 @@ from the GParted project and is not vendored here.
 GitHub Actions builds in a CentOS Stream 10 container; this is not a substitute
 for testing the resulting RPM on each supported distribution.
 
+## Install a release
+
+Download the x86_64 RPM and `SHA256SUMS` from the
+[Releases page](https://github.com/ZedKeane/gparted-rhel10/releases), then run:
+
+```bash
+sha256sum -c --ignore-missing SHA256SUMS
+sudo dnf install ./gparted-1.8.1-2.el10.x86_64.rpm
+```
+
+The RPM is unsigned. The checksum detects transfer errors but does not prove
+the publisher's identity. These release assets are not a signed RPM repository.
+
 ## Build
 
 Enable the distribution's CodeReady Builder/CRB repository and EPEL 10, then
@@ -95,9 +108,9 @@ cause data loss because of software bugs, hardware failure, or power loss.
 Back up data before applying any operation and prefer a supported Live system
 when editing operating-system partitions.
 
-Local builds and GitHub Actions artifacts are not RPM-signed.  Before
-publishing installable releases, configure an RPM signing key or use a build
-service such as COPR that can sign repository metadata and packages.
+Local builds and GitHub Actions release assets are not RPM-signed. A future
+signed repository would require a managed RPM signing key or a build service
+such as COPR that signs packages and repository metadata.
 
 ## Provenance and licenses
 
