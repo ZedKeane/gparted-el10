@@ -1,0 +1,2 @@
+# Preserve upstream COPYING verbatim.
+addFilter(r"incorrect-fsf-address /usr/share/licenses/gparted/COPYING$")

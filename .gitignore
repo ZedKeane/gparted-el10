@@ -1,0 +1,8 @@
+/.build/
+/.env
+/.env.*
+/*.rpm
+/*.src.rpm
+/.idea/
+/.vscode/
+*~

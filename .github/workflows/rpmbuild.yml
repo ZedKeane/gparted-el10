@@ -1,0 +1,57 @@
+name: Build RHEL 10 RPM
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rpm:
+    runs-on: ubuntu-latest
+    container: quay.io/centos/centos:stream10
+
+    steps:
+      - name: Install bootstrap tools
+        run: |
+          dnf install -y dnf-plugins-core epel-release git
+          dnf config-manager --set-enabled crb
+
+      - uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          dnf install -y rpm-build gnupg2 curl rpmlint ShellCheck
+          dnf builddep -y ./gparted.spec
+
+      - name: Static project checks
+        run: |
+          shellcheck scripts/*.sh
+          ./scripts/check-documentation.sh
+          rpmspec -P ./gparted.spec >/dev/null
+
+      - name: Build RPM and SRPM
+        run: GTEST_FILTER=-BlockSpecialTest.NamedBlockSpecialObjectBySymlinkMatches ./scripts/build-rpm.sh
+
+      - name: Audit main package
+        run: ./scripts/check-rpm.sh .build/rpmbuild/RPMS/*/gparted-[0-9]*.rpm
+
+      - name: Lint packages
+        run: rpmlint -r rpmlintrc gparted.spec .build/rpmbuild/RPMS/*/*.rpm .build/rpmbuild/SRPMS/*.src.rpm
+
+      - name: Install and verify runtime coverage
+        run: |
+          printf '%%_install_langs all\n' >/etc/rpm/macros.zz-gparted-ci
+          test "$(rpm --eval '%{_install_langs}')" = all
+          dnf install -y glibc-langpack-zh .build/rpmbuild/RPMS/*/gparted-[0-9]*.rpm
+          ./scripts/verify-runtime.sh --strict --require-zh
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: gparted-rhel10-rpms
+          path: |
+            .build/rpmbuild/RPMS/**/*.rpm
+            .build/rpmbuild/SRPMS/*.src.rpm
